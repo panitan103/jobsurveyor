@@ -44,7 +44,30 @@ docker compose up -d --build
 ```
 
 The compose file binds `127.0.0.1:3100` and mounts `./data` at `/data`. Put your reverse proxy
-(Pangolin, Caddy, nginx) in front if you need remote access.
+(Pangolin, Caddy, nginx) in front if you need remote access. The app has no authentication — always
+put it behind an auth layer before exposing it.
+
+Health check: `GET /api/health` returns `{ "ok": true, "jobs": <count> }`. It is also used by the
+Compose healthcheck.
+
+## Backup
+
+```bash
+./scripts/backup.sh
+```
+
+Creates a consistent SQLite snapshot via `VACUUM INTO`, copies it to `./backups/`, and keeps 14
+days. Example cron:
+
+```cron
+15 3 * * * cd /home/sefree/jobsurveyor && ./scripts/backup.sh >> /var/log/jobsurveyor-backup.log 2>&1
+```
+
+Copy `backups/*.db` off the machine (NAS) regularly; a snapshot on the same disk is not a backup.
+
+## CI
+
+GitHub Actions runs typecheck, tests, and a production build on every push and pull request.
 
 ## CSV
 

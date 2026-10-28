@@ -12,7 +12,8 @@ services:
     volumes:
       - ./data:/data
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3100/api/jobs"]
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3100/api/health"]
       interval: 30s
       timeout: 5s
       retries: 3
+      start_period: 15s
