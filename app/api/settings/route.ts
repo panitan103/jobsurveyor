@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getSettings, saveSettings } from "@/lib/db";
+import { publicUrl } from "@/lib/redirect";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -33,5 +34,5 @@ export async function POST(request: NextRequest) {
     activePreset: "custom",
   });
 
-  return NextResponse.redirect(new URL("/settings?saved=1", request.url), 303);
+  return NextResponse.redirect(publicUrl(request, "/settings?saved=1"), 303);
 }

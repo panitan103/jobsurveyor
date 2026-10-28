@@ -9,6 +9,7 @@ services:
       DATA_DIR: /data
       DEFAULT_LANG: th
       TZ: Asia/Bangkok
+      PUBLIC_URL: ${PUBLIC_URL:-}
     volumes:
       - ./data:/data
     healthcheck:

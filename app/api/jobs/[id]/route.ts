@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateJobState } from "@/lib/db";
+import { publicUrl } from "@/lib/redirect";
 import { JOB_STATUSES, type JobStatus } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -25,5 +26,5 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   });
   if (!job) return NextResponse.json({ error: "not found" }, { status: 404 });
 
-  return NextResponse.redirect(new URL(`/jobs/${jobId}?updated=1`, request.url), 303);
+  return NextResponse.redirect(publicUrl(request, `/jobs/${jobId}?updated=1`), 303);
 }
