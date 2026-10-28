@@ -57,6 +57,8 @@ export interface Settings {
   minSalary: number;
   /** Matched keyword weight that counts as a full 100. */
   targetWeight: number;
+  /** manufacturing | software-ops | custom */
+  activePreset: string;
 }
 
 export interface CsvIssue {

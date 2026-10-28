@@ -76,6 +76,7 @@ export const DEFAULT_SETTINGS: Settings = {
   maxKm: 120,
   minSalary: 0,
   targetWeight: 48,
+  activePreset: "manufacturing",
 };
 
 export function normalizeText(value: string | null | undefined): string {

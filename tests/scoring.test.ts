@@ -31,6 +31,7 @@ const settings: Settings = {
   maxKm: 100,
   minSalary: 0,
   targetWeight: 20,
+  activePreset: "custom",
 };
 
 test("matched keywords raise the score", () => {

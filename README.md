@@ -84,6 +84,16 @@ matched weight that counts as a full score.
 
 Base province defaults to Bangkok. Distance is looked up from a built-in province table.
 
+### Weight presets
+
+Settings ships two presets and switches in one click (all jobs rescore immediately):
+
+- **Manufacturing / Automation** — PLC, robotics, embedded, vision, commissioning.
+- **Software Ops / DevOps** — Kubernetes, Docker, Terraform, CI/CD, cloud, observability, SRE.
+
+Editing any weight marks the profile as `custom`. Presets are defined in `lib/presets.ts`; add a
+new one there and it appears in Settings automatically.
+
 ## Scope
 
 This repository deliberately contains **no web scrapers** and no references to any job board.

@@ -2,6 +2,7 @@ import { DatabaseSync } from "node:sqlite";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { DEFAULT_SETTINGS, scoreJob } from "./scoring";
+import { detectPreset } from "./presets";
 import { fingerprintFor } from "./csv";
 import type { Job, JobInput, JobStatus, Settings, Tier } from "./types";
 
@@ -83,12 +84,18 @@ export function getSettings(): Settings {
   if (!row) return { ...DEFAULT_SETTINGS, weights: { ...DEFAULT_SETTINGS.weights } };
   try {
     const parsed = JSON.parse(String(row.value)) as Partial<Settings>;
+    const storedWeights =
+      parsed.weights && typeof parsed.weights === "object" ? parsed.weights : { ...DEFAULT_SETTINGS.weights };
     return {
-      weights: { ...DEFAULT_SETTINGS.weights, ...(parsed.weights ?? {}) },
+      weights: storedWeights,
       baseProvince: parsed.baseProvince || DEFAULT_SETTINGS.baseProvince,
       maxKm: typeof parsed.maxKm === "number" ? parsed.maxKm : DEFAULT_SETTINGS.maxKm,
       minSalary: typeof parsed.minSalary === "number" ? parsed.minSalary : DEFAULT_SETTINGS.minSalary,
       targetWeight: typeof parsed.targetWeight === "number" ? parsed.targetWeight : DEFAULT_SETTINGS.targetWeight,
+      activePreset: parsed.activePreset || detectPreset(
+        storedWeights,
+        typeof parsed.targetWeight === "number" ? parsed.targetWeight : DEFAULT_SETTINGS.targetWeight,
+      ),
     };
   } catch {
     return { ...DEFAULT_SETTINGS, weights: { ...DEFAULT_SETTINGS.weights } };

@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
     maxKm: num(form.get("maxKm"), current.maxKm),
     minSalary: num(form.get("minSalary"), current.minSalary),
     targetWeight: num(form.get("targetWeight"), current.targetWeight),
+    activePreset: "custom",
   });
 
   return NextResponse.redirect(new URL("/settings?saved=1", request.url), 303);

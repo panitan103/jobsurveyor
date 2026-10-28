@@ -1,6 +1,7 @@
 import { getSettings, listImportRuns } from "@/lib/db";
 import { getLang, t } from "@/lib/i18n";
 import { formatDate } from "@/lib/format";
+import { PRESETS } from "@/lib/presets";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,42 @@ export default async function SettingsPage({ searchParams }: { searchParams: Sea
       </div>
 
       {saved && <div className="notice notice-ok">{t(lang, "saved")} — {t(lang, "rescored")}</div>}
+      {params.preset && (
+        <div className="notice notice-ok">
+          {lang === "th" ? "โหลด preset แล้วและคำนวณคะแนนใหม่ทั้งฐาน" : "Preset loaded and all jobs rescored"}
+        </div>
+      )}
+
+      <div className="panel">
+        <h2>{lang === "th" ? "ชุดน้ำหนัก (Preset)" : "Weight presets"}</h2>
+        <p className="small muted">
+          {lang === "th"
+            ? "สลับชุดน้ำหนักตามสายงานที่กำลังหาอยู่ ระบบจะคำนวณคะแนนใหม่ทั้งฐานทันที"
+            : "Switch the weight set for the kind of role you are chasing. All jobs are rescored immediately."}
+        </p>
+        <div className="row-actions">
+          {PRESETS.map((preset) => {
+            const active = settings.activePreset === preset.id;
+            return (
+              <form action="/api/presets" method="post" key={preset.id}>
+                <input type="hidden" name="preset" value={preset.id} />
+                <button type="submit" className={active ? undefined : "btn-ghost"}>
+                  {active ? "✓ " : ""}{preset.label[lang]}
+                </button>
+              </form>
+            );
+          })}
+          {settings.activePreset === "custom" && (
+            <span className="badge">{lang === "th" ? "แก้ไขเอง (Custom)" : "Custom"}</span>
+          )}
+        </div>
+        <p className="small muted" style={{ marginTop: 10 }}>
+          {PRESETS.find((preset) => preset.id === settings.activePreset)?.description[lang] ??
+            (lang === "th"
+              ? "คุณแก้ไขน้ำหนักเอง ชุดนี้จึงไม่ตรงกับ preset ใด"
+              : "Weights were edited manually, so they no longer match a preset.")}
+        </p>
+      </div>
 
       <form action="/api/settings" method="post" className="stack">
         <div className="panel">
