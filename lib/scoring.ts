@@ -102,11 +102,8 @@ export interface ScoreResult {
 }
 
 export function scoreJob(job: JobInput, settings: Settings): ScoreResult {
-  const haystack = normalizeText(
-    [job.title, job.tags.join(" "), job.description, job.employment_type]
-      .filter(Boolean)
-      .join(" "),
-  );
+  const titleText = normalizeText([job.title, job.tags.join(" "), job.employment_type].join(" "));
+  const descriptionText = normalizeText(job.description);
   const title = normalizeText(job.title);
 
   const weights = settings.weights ?? {};
@@ -120,11 +117,16 @@ export function scoreJob(job: JobInput, settings: Settings): ScoreResult {
     if (weight <= 0) continue;
     const needle = normalizeText(keyword);
     if (!needle) continue;
-    if (haystack.includes(needle)) {
-      matched.push(keyword);
-      matchedWeight += weight;
-      if (title.includes(needle)) titleWeight += weight;
-    }
+
+    const inTitleOrTags = titleText.includes(needle);
+    const inDescription = descriptionText.includes(needle);
+    if (!inTitleOrTags && !inDescription) continue;
+
+    matched.push(keyword);
+    // A keyword only mentioned in a long description counts half: it signals context,
+    // not that the role is actually about that skill.
+    matchedWeight += inTitleOrTags ? weight : weight * 0.5;
+    if (title.includes(needle)) titleWeight += weight;
   }
 
   const target = settings.targetWeight > 0 ? settings.targetWeight : Math.max(1, totalWeight * 0.45);

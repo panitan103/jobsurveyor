@@ -45,7 +45,8 @@ Rows with errors are skipped; valid rows in the same file are still imported aft
 weight that counts as a full score, so a posting hitting automation + robotics + PLC + commissioning
 can reach tier A without matching every keyword in the list.
 
-- matched keywords are found by substring in lowercased title + tags + description + employment type
+- keywords in title, tags, or employment type count at full weight; keywords found only in the
+  description count at half weight (long job descriptions mention everything)
 - distance penalty applies when `province` is known and farther than `maxKm`
 - salary penalty applies when `salary_max` is below `minSalary`
 - tier: A ≥ 80, B ≥ 65, otherwise C
