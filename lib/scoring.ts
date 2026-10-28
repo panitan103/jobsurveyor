@@ -27,6 +27,7 @@ export const DEFAULT_WEIGHTS: Record<string, number> = {
 /** Approximate road distance in km from Bangkok. Used only when the job province is known. */
 export const PROVINCE_DISTANCE_KM: Record<string, number> = {
   bangkok: 0,
+  กรุงเทพ: 0,
   "krung thep maha nakhon": 0,
   "กรุงเทพมหานคร": 0,
   nonthaburi: 20,
