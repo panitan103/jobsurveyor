@@ -1,0 +1,20 @@
+node_modules/
+.next/
+out/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# local data — never commit
+data/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+
+.env
+.env.*
+!.env.example
+
+.DS_Store
+npm-debug.log*
